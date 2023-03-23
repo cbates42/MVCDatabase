@@ -13,10 +13,13 @@ namespace MVCDatabase.Controllers
     public class CharacterController : Controller
     {
         private PROG455SP23Entities db = new PROG455SP23Entities();
+        Services.Services services = new Services.Services();
 
         // GET: Character
         public ActionResult Index()
         {
+          
+            var characters = services.GetCharacters();
             return View(db.Characters.ToList());
         }
 
@@ -27,7 +30,7 @@ namespace MVCDatabase.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Character character = db.Characters.Find(id);
+            Character character = services.FindCharacter(id);
             if (character == null)
             {
                 return HttpNotFound();
@@ -50,8 +53,7 @@ namespace MVCDatabase.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Characters.Add(character);
-                db.SaveChanges();
+                services.AddCharacter(character);
                 return RedirectToAction("Index");
             }
 
@@ -65,7 +67,7 @@ namespace MVCDatabase.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Character character = db.Characters.Find(id);
+            Character character = services.FindCharacter(id);
             if (character == null)
             {
                 return HttpNotFound();
@@ -96,7 +98,7 @@ namespace MVCDatabase.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Character character = db.Characters.Find(id);
+            Character character = services.FindCharacter(id);
             if (character == null)
             {
                 return HttpNotFound();
@@ -109,9 +111,8 @@ namespace MVCDatabase.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Character character = db.Characters.Find(id);
-            db.Characters.Remove(character);
-            db.SaveChanges();
+            Character character = services.FindCharacter(id);
+            services.DeleteCharacter(id);
             return RedirectToAction("Index");
         }
 
