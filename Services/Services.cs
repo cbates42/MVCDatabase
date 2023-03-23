@@ -20,8 +20,15 @@ namespace MVCDatabase.Services
 
         public void AddCharacter(Character character)
         {
-            db.Characters.Add(character);
-            db.SaveChanges();
+            if (character != null)
+            {
+                db.Characters.Add(character);
+                db.SaveChanges();
+            }
+            else
+            {
+                throw new NullReferenceException();
+            }
         }    
 
         public Character FindCharacter(int? id)
@@ -34,7 +41,7 @@ namespace MVCDatabase.Services
 
             else
             {
-                return null;
+                throw new NullReferenceException();          
             }
         }
 
